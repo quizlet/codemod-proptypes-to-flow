@@ -26,7 +26,7 @@ function addFlowComment(j, ast, options) {
 
 export default function transformer(file, api, rawOptions) {
   const j = api.jscodeshift;
-  const root = j(file.source);
+  const root = j.withParser('flow')(file.source);
 
   const options = rawOptions;
   if (options.flowComment !== 'line' && options.flowComment !== 'block') {
@@ -62,3 +62,5 @@ export default function transformer(file, api, rawOptions) {
     return file.source;
   }
 }
+
+export const parser = 'flow';

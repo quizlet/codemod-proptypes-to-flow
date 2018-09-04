@@ -15,6 +15,23 @@ const isStaticPropType = p => {
   );
 };
 
+function hasPropsOnSuperType(classNode) {
+  const superTypeParams =
+    classNode.value.superTypeParameters &&
+    classNode.value.superTypeParameters.params;
+  if (superTypeParams && superTypeParams.length >= 1) {
+    const { id } = superTypeParams[0];
+    if (id) {
+      const superTypeParamName = superTypeParams[0].id.name;
+      // treat Flow suppression like `$FlowFixMeProps` as no type defined
+      if (!superTypeParamName.startsWith('$')) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function containsFlowProps(classBody) {
   return !!classBody.find(bodyElement => bodyElement.key.name === 'props');
 }
@@ -37,6 +54,8 @@ export default function transformEs6Classes(ast, j, options) {
   // find classes with propType static class property
   const modifications = reactClassPaths
     .forEach(p => {
+      if (hasPropsOnSuperType(p)) return;
+
       const className = reactUtils.getComponentName(p);
       const propIdentifier = reactClassPaths.length === 1
         ? options.propsTypeSuffix

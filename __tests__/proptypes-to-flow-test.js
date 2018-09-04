@@ -552,6 +552,62 @@ describe('React.PropTypes to flow', () => {
       export default MyComponent;
     `;
 
-    expect(transformString(input)).toMatchSnapshot();
+    const output = transformString(input);
+    expect(output.match(/type Props/g)).toHaveLength(1);
+    expect(output).toMatchSnapshot();
+  });
+
+  it('does not touch files with flow Props already declared in generics', () => {
+    const input = `
+      /* @flow */
+      import * as React from 'react';
+
+      type Props = {
+        created_at?: string,
+      };
+
+      class MyComponent extends React.Component<Props> {
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      export default MyComponent;
+    `;
+
+    const output = transformString(input);
+    expect(output.match(/type Props/g)).toHaveLength(1);
+    expect(output).toMatchSnapshot();
+  });
+
+  it('traverses files with $FlowFixMeProps in generics', () => {
+    const input = `
+      /* @flow */
+      import * as React from 'react';
+
+      class MyComponent extends React.Component<$FlowFixMeProps> {
+        static propTypes = {
+          /**
+           * block comment
+           */
+          optionalArray: React.PropTypes.array,
+          anotherProp: React.PropTypes.string,
+        };
+
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      export default MyComponent;
+    `;
+
+    const output = transformString(input);
+    expect(output.match(/type Props/g)).toHaveLength(1);
+    expect(output).toMatchSnapshot();
   });
 });

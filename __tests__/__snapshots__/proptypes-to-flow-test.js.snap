@@ -104,6 +104,27 @@ exports[`React.PropTypes to flow does not touch files with flow Props already de
     "
 `;
 
+exports[`React.PropTypes to flow does not touch files with flow Props already declared in generics 1`] = `
+"
+      /* @flow */
+      import * as React from 'react';
+
+      type Props = {
+        created_at?: string,
+      };
+
+      class MyComponent extends React.Component<Props> {
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      export default MyComponent;
+    "
+`;
+
 exports[`React.PropTypes to flow does not touch non React classes 1`] = `
 "
       class PureComponent extends Class {
@@ -495,5 +516,32 @@ exports[`React.PropTypes to flow transforms something that just looks like React
       }
 
       export default Test;
+    "
+`;
+
+exports[`React.PropTypes to flow traverses files with $FlowFixMeProps in generics 1`] = `
+"
+      /* @flow */
+      import * as React from 'react';
+
+      type Props = {
+        /**
+         * block comment
+         */
+        optionalArray?: Array<any>,
+        anotherProp?: string,
+      };
+
+      class MyComponent extends React.Component<$FlowFixMeProps> {
+        props: Props;
+
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      export default MyComponent;
     "
 `;

@@ -582,6 +582,27 @@ describe('React.PropTypes to flow', () => {
     expect(output).toMatchSnapshot();
   });
 
+  it('does process files with existential type declared in generics', () => {
+    const input = `
+      /* @flow */
+      import * as React from 'react';
+
+      class MyComponent extends React.Component<*, State> {
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      export default MyComponent;
+    `;
+
+    const output = transformString(input);
+    expect(output.match(/type Props/g)).toHaveLength(1);
+    expect(output).toMatchSnapshot();
+  });
+
   it('traverses files with $FlowFixMeProps in generics', () => {
     const input = `
       /* @flow */

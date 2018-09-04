@@ -8,8 +8,7 @@ exports[`React.PropTypes to flow add empty PropTypes (no constructor) 1`] = `
 
       type Props = {};
 
-      class Cards extends React.Component {
-        props: Props;
+      class Cards extends React.Component<Props> {
         render() {
           return (
             <View />
@@ -30,13 +29,12 @@ exports[`React.PropTypes to flow adds empty PropTypes (constructor) 1`] = `
 
       type Props = {};
 
-      class PureComponent extends Component {
+      class PureComponent extends Component<Props> {
         constructor(props: Props) {
           super(props);
 
           this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
         }
-        props: Props;
         render() {
           return (
             <View />
@@ -55,12 +53,10 @@ exports[`React.PropTypes to flow adds type annotation to \`prop\` parameter in c
 
       type ComponentProps = {};
 
-      export default class Component extends React.Component {
+      export default class Component extends React.Component<ComponentProps> {
         constructor(props: ComponentProps) {
           super(props);
         }
-
-        props: ComponentProps;
 
         componentDidMount() {
         }
@@ -68,12 +64,10 @@ exports[`React.PropTypes to flow adds type annotation to \`prop\` parameter in c
 
       type Component2Props = {};
 
-      class Component2 extends React.Component {
+      class Component2 extends React.Component<Component2Props> {
         constructor(props: Component2Props) {
           super(props);
         }
-
-        props: Component2Props;
 
         componentDidMount() {
         }
@@ -136,6 +130,25 @@ exports[`React.PropTypes to flow does not touch non React classes 1`] = `
     "
 `;
 
+exports[`React.PropTypes to flow does process files with existential type declared in generics 1`] = `
+"
+      /* @flow */
+      import * as React from 'react';
+
+      type Props = {};
+
+      class MyComponent extends React.Component<Props, State> {
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      export default MyComponent;
+    "
+`;
+
 exports[`React.PropTypes to flow handles block comments 1`] = `
 "
       /* @flow */
@@ -149,9 +162,7 @@ exports[`React.PropTypes to flow handles block comments 1`] = `
         anotherProp?: string,
       };
 
-      export default class Test extends React.Component {
-        props: Props;
-      }
+      export default class Test extends React.Component<Props> {}
     "
 `;
 
@@ -181,9 +192,7 @@ exports[`React.PropTypes to flow handles presence of defaultProps 1`] = `
         anotherProp?: string,
       };
 
-      export default class Test extends React.Component {
-        props: Props;
-
+      export default class Test extends React.Component<Props> {
         static defaultProps = {
           anotherProp: ''
         };
@@ -307,11 +316,10 @@ exports[`React.PropTypes to flow transforms PropTypes that are a class property 
         requiredAny: any,
       };
 
-      export default class Test extends React.Component {
+      export default class Test extends React.Component<Props> {
         constructor(props: Props) {
           super(props);
         }
-        props: Props;
       }
     "
 `;
@@ -343,8 +351,7 @@ exports[`React.PropTypes to flow transforms PropTypes that are defined outside o
         requiredAny: any,
       };
 
-      export default class Test extends React.Component {
-        props: Props;
+      export default class Test extends React.Component<Props> {
         componentDidMount() {
         }
       }
@@ -506,8 +513,7 @@ exports[`React.PropTypes to flow transforms something that just looks like React
 
       type Props = { optionalArray?: Array<any> };
 
-      class Test extends PureComponent {
-        props: Props;
+      class Test extends PureComponent<Props> {
         render() {
           return (
             <div />
@@ -532,9 +538,7 @@ exports[`React.PropTypes to flow traverses files with $FlowFixMeProps in generic
         anotherProp?: string,
       };
 
-      class MyComponent extends React.Component<$FlowFixMeProps> {
-        props: Props;
-
+      class MyComponent extends React.Component<Props> {
         render() {
           return (
             <div />

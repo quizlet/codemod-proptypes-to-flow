@@ -1,4 +1,5 @@
 import annotateConstructor from '../helpers/annotateConstructor';
+import annotateComponentSupertype from '../helpers/annotateComponentSupertype';
 import createTypeAlias from '../helpers/createTypeAlias';
 import findIndex from '../helpers/findIndex';
 import findParentBody from '../helpers/findParentBody';
@@ -68,6 +69,7 @@ export default function transformEs6Classes(ast, j, options) {
           return;
         }
 
+        annotateComponentSupertype(j, p, propIdentifier);
         annotateConstructor(j, classBody, propIdentifier);
         const index = findIndex(classBody, isStaticPropType);
         if (typeof index !== 'undefined') {
